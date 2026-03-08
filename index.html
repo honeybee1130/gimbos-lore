@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Church of the Gimbo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-bright: #e8c96a;
+    --gold-dim: #8a7038;
+    --black: #080806;
+    --dark: #0d0b08;
+    --stone: #1a1814;
+    --text: #d4cfc4;
+    --text-dim: #7a7568;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(8,8,6,0.9) 0%, transparent 100%);
+  }
+
+  nav .mark {
+    font-family: 'Cormorant SC', serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+
+  nav ul li a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-family: 'Cormorant SC', serif;
+    transition: color 0.3s;
+  }
+
+  nav ul li a:hover { color: var(--gold); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('./images/02_the_church.png');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.3) saturate(0.6);
+    transform: scale(1.05);
+    transition: transform 20s ease;
+  }
+
+  .hero:hover .hero-bg { transform: scale(1.0); }
+
+  .hero-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(8,8,6,0.8) 100%);
+  }
+
+  .hero-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, transparent, var(--black));
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 700px;
+    padding: 0 24px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  h1 {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: 0.05em;
+    color: #fff;
+    margin-bottom: 24px;
+    text-shadow: 0 0 80px rgba(201, 168, 76, 0.3);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 480px;
+    margin: 0 auto 48px;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .hero-cta:hover {
+    background: rgba(201, 168, 76, 0.1);
+    border-color: var(--gold);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-family: 'Cormorant SC', serif;
+    animation: fadepulse 2.5s ease-in-out infinite;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  }
+
+  @keyframes fadepulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.9; }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── OPENING VERSE ─── */
+  .verse {
+    padding: 120px 24px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .verse p {
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.9;
+    color: var(--text);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .verse p strong {
+    color: #fff;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  .verse .attribution {
+    margin-top: 40px;
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+
+  .divider span {
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  /* ─── CHAPTER ─── */
+  .chapter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+    align-items: center;
+  }
+
+  .chapter.reverse { direction: rtl; }
+  .chapter.reverse > * { direction: ltr; }
+
+  .chapter-image {
+    position: relative;
+    height: 80vh;
+    overflow: hidden;
+  }
+
+  .chapter-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.75) saturate(0.8);
+    transition: transform 8s ease, filter 0.5s;
+  }
+
+  .chapter-image:hover img {
+    transform: scale(1.03);
+    filter: brightness(0.85) saturate(0.9);
+  }
+
+  .chapter-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--black) 0%, transparent 40%);
+  }
+
+  .chapter.reverse .chapter-image::after {
+    background: linear-gradient(to left, var(--black) 0%, transparent 40%);
+  }
+
+  .chapter-text {
+    padding: 80px 80px 80px 60px;
+  }
+
+  .chapter.reverse .chapter-text {
+    padding: 80px 60px 80px 80px;
+  }
+
+  .chapter-number {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .chapter-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 32px;
+    letter-spacing: 0.02em;
+  }
+
+  .chapter-body {
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .chapter-body p { margin-bottom: 20px; }
+
+  .chapter-quote {
+    border-left: 2px solid var(--gold-dim);
+    padding-left: 24px;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--gold);
+    margin: 32px 0;
+  }
+
+  /* ─── FULL BLEED SECTION ─── */
+  .fullbleed {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fullbleed-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .fullbleed-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.3) saturate(0.7);
+  }
+
+  .fullbleed-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--black) 0%, transparent 20%, transparent 80%, var(--black) 100%);
+  }
+
+  .fullbleed-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 600px;
+    padding: 0 24px;
+  }
+
+  .fullbleed-content blockquote {
+    font-size: clamp(22px, 4vw, 36px);
+    line-height: 1.6;
+    font-style: italic;
+    color: #fff;
+    font-weight: 300;
+    text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+  }
+
+  .fullbleed-content cite {
+    display: block;
+    margin-top: 24px;
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  /* ─── FACTIONS ─── */
+  .factions {
+    padding: 120px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .factions-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .factions-header h2 {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .factions-header p {
+    color: var(--text-dim);
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  .faction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .faction-card {
+    background: var(--stone);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .faction-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .faction-card:hover { background: #1f1c17; }
+  .faction-card:hover::before { opacity: 1; }
+
+  .faction-name {
+    font-family: 'Cormorant SC', serif;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .faction-class {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'Cormorant SC', serif;
+    margin-bottom: 24px;
+  }
+
+  .faction-lore {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  /* ─── SACRED LAW ─── */
+  .sacred-law {
+    padding: 120px 24px;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .sacred-law h2 {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 64px;
+  }
+
+  .law-list {
+    list-style: none;
+    counter-reset: law;
+  }
+
+  .law-list li {
+    counter-increment: law;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 40px;
+    text-align: left;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  }
+
+  .law-list li:last-child { border-bottom: none; }
+
+  .law-list li::before {
+    content: counter(law, upper-roman);
+    font-family: 'Cormorant SC', serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    min-width: 36px;
+    padding-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .law-text {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .law-text strong {
+    color: #fff;
+    font-weight: 400;
+    display: block;
+    font-size: 22px;
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+
+  /* ─── MINT SECTION ─── */
+  .mint {
+    position: relative;
+    padding: 160px 24px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .mint-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('./images/05_the_congregation.png');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.15) saturate(0.4);
+  }
+
+  .mint-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(8,8,6,0.7) 100%);
+  }
+
+  .mint-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to bottom, var(--black), transparent);
+  }
+
+  .mint-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to top, var(--black), transparent);
+  }
+
+  .mint-content {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .mint-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .mint-eyebrow::before,
+  .mint-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  .mint h2 {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(40px, 7vw, 88px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 24px;
+    letter-spacing: 0.03em;
+  }
+
+  .mint-date {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(28px, 5vw, 56px);
+    color: var(--gold);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+  }
+
+  .mint p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 56px;
+  }
+
+  .mint-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 18px 48px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover { background: var(--gold-bright); }
+
+  .btn-secondary {
+    display: inline-block;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 18px 48px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(201, 168, 76, 0.08);
+    border-color: var(--gold);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 60px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(201, 168, 76, 0.1);
+    position: relative;
+    z-index: 2;
+  }
+
+  footer .mark {
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    nav { padding: 20px 24px; }
+
+    .chapter {
+      grid-template-columns: 1fr;
+    }
+
+    .chapter-image { height: 50vh; }
+    .chapter-image::after { background: linear-gradient(to bottom, transparent 50%, var(--black)); }
+    .chapter.reverse .chapter-image::after { background: linear-gradient(to bottom, transparent 50%, var(--black)); }
+
+    .chapter-text { padding: 48px 24px; }
+    .chapter.reverse .chapter-text { padding: 48px 24px; }
+
+    .factions { padding: 80px 24px; }
+
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+
+  /* ─── FADE IN ANIMATION ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="mark">Ape Church</div>
+  <ul>
+    <li><a href="#the-church">The Church</a></li>
+    <li><a href="#factions">The Factions</a></li>
+    <li><a href="#the-law">Sacred Law</a></li>
+    <li><a href="#mint">The Offering</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-bottom"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Est. Before Memory</div>
+    <h1>The Church<br>of the <em>Gimbo</em></h1>
+    <p class="hero-sub">Oldest structure in the Otherside. We have been expecting you.</p>
+    <a href="#the-church" class="hero-cta">Enter the Church</a>
+  </div>
+  <div class="scroll-hint">Descend</div>
+</section>
+
+<!-- OPENING VERSE -->
+<section>
+  <div class="verse fade-in">
+    <p>
+      Before the Apes mapped the land.<br>
+      Before the Kodas named the biomes.<br>
+      Before anyone drew a border or claimed a shore —<br><br>
+      <strong>there were the ponds.</strong>
+    </p>
+    <p>
+      In the swampy margins between everything,<br>
+      in the spaces no one wanted,<br>
+      the tadpoles were already evolving.<br><br>
+      They found the altar before they found language.
+    </p>
+    <div class="attribution">— The First Chapter, Book of Gimbo</div>
+  </div>
+</section>
+
+<div class="divider fade-in"><span>✦</span></div>
+
+<!-- CHAPTER 1: BEFORE THE MAPS -->
+<section id="the-church" class="chapter fade-in">
+  <div class="chapter-image">
+    <img src="./images/01_before_the_maps.png" alt="Before the Maps" loading="lazy">
+  </div>
+  <div class="chapter-text">
+    <div class="chapter-number">Chapter I</div>
+    <h2 class="chapter-title">Before the Maps</h2>
+    <div class="chapter-body">
+      <p>The Otherside has records of everything. The Apes catalogued every biome. Every Koda was named. Every sedra, every plot, every structure — logged, mapped, owned.</p>
+      <p>The Church does not appear in any of those records.</p>
+      <p>It was there before the records began.</p>
+    </div>
+    <blockquote class="chapter-quote">
+      "The Kodas know about it.<br>They don't talk about it."
+    </blockquote>
+    <div class="chapter-body">
+      <p>In the swampy margins between biomes, in the dark water between what was claimed and what was forgotten — the Church stands. Stone. Cold. Certain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BLEED: THE CHURCH -->
+<section class="fullbleed fade-in">
+  <div class="fullbleed-bg">
+    <img src="./images/02_the_church.png" alt="The Church" loading="lazy">
+  </div>
+  <div class="fullbleed-overlay"></div>
+  <div class="fullbleed-content">
+    <blockquote>
+      "A frog cult runs a casino in an ancient church at the edge of the known world. Nobody knows how long it's been there. Nobody knows who built the altar. They just know: the Church provides."
+    </blockquote>
+    <cite>— World Strategy Document, Ape Church</cite>
+  </div>
+</section>
+
+<!-- CHAPTER 2: THE DEACON -->
+<section class="chapter reverse fade-in">
+  <div class="chapter-image">
+    <img src="./images/03_the_deacon.png" alt="The Deacon" loading="lazy">
+  </div>
+  <div class="chapter-text">
+    <div class="chapter-number">Chapter II</div>
+    <h2 class="chapter-title">The Deacon</h2>
+    <div class="chapter-body">
+      <p>He does not introduce himself. He does not ask your name. He was here when the first Gimbo walked through the door, and he will be here when the last one leaves.</p>
+      <p>The Deacon is the Church's only constant. Hooded. Ancient. Patient in the way that stone is patient.</p>
+    </div>
+    <blockquote class="chapter-quote">
+      "He nods once when something true is said. That is enough."
+    </blockquote>
+    <div class="chapter-body">
+      <p>He has seen ten thousand offerings. He has watched the desperate and the faithful and the broken make their throw. He judges none of them. The altar does that work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3: THE ALTAR -->
+<section class="chapter fade-in">
+  <div class="chapter-image">
+    <img src="./images/04_the_altar.png" alt="The Altar" loading="lazy">
+  </div>
+  <div class="chapter-text">
+    <div class="chapter-number">Chapter III</div>
+    <h2 class="chapter-title">The Altar</h2>
+    <div class="chapter-body">
+      <p>The altar at the center of the Church is older than anyone who has ever stood before it. Its surface is carved with marks that predate Gimbo script. The runestones in its grooves have been polished by ten thousand palms.</p>
+      <p>It is also a casino table. This is not a contradiction.</p>
+    </div>
+    <blockquote class="chapter-quote">
+      "Playing is praying.<br>Losing is tithing.<br>The altar rewards commitment. Not caution."
+    </blockquote>
+    <div class="chapter-body">
+      <p>You don't come to the altar because you expect to win. You come because showing up is the act of faith. The universe notices the ones who don't hedge.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BLEED: THE OFFERING -->
+<section class="fullbleed fade-in">
+  <div class="fullbleed-bg">
+    <img src="./images/04_the_altar.png" alt="The Offering" loading="lazy">
+  </div>
+  <div class="fullbleed-overlay"></div>
+  <div class="fullbleed-content">
+    <blockquote>
+      "They found the Church. The Church didn't promise luck. It promised that if you showed up with nothing held back — made your offering, risked it all — the universe would answer."
+    </blockquote>
+    <cite>— Lore Bible, Gimbos</cite>
+  </div>
+</section>
+
+<!-- FACTIONS -->
+<section id="factions" class="factions fade-in">
+  <div class="factions-header">
+    <div class="divider" style="margin-bottom: 40px;"><span>✦</span></div>
+    <h2>The Five Orders</h2>
+    <p>All roads lead to the Church. They just start from different places.</p>
+  </div>
+  <div class="faction-grid">
+    <div class="faction-card">
+      <div class="faction-name">Stone Gimbos</div>
+      <div class="faction-class">The Ancient</div>
+      <div class="faction-lore">They've been at the altar longer than you've known this place existed. Weekly. Every week. Offering after offering. The Church noticed. You think grinding is new? They invented it.</div>
+    </div>
+    <div class="faction-card">
+      <div class="faction-name">Forest Gimbos</div>
+      <div class="faction-class">The Oracles</div>
+      <div class="faction-lore">They remember bets that haven't happened yet. They sit in the old growth between the biomes and they know things. When a Forest Gimbo shows up at the altar, the other Gimbos watch what they do.</div>
+    </div>
+    <div class="faction-card">
+      <div class="faction-name">Void Gimbos</div>
+      <div class="faction-class">The Returned</div>
+      <div class="faction-lore">Lost everything. Came back. Lost it again. Came back again. The void Gimbo doesn't fear the altar. The altar fears the void Gimbo. Some things you can't scare away from the game.</div>
+    </div>
+    <div class="faction-card">
+      <div class="faction-name">Tech Gimbos</div>
+      <div class="faction-class">The Calculators</div>
+      <div class="faction-lore">They run the probability models. They know the exact odds. Then they throw the runestones anyway. Faith and math are not enemies. The Church has room for both.</div>
+    </div>
+    <div class="faction-card">
+      <div class="faction-name">Warrior Class</div>
+      <div class="faction-class">The Ordained</div>
+      <div class="faction-lore">Took on a role. Serve the Church. The plague doctor, the ninja, the sentinel — they did not choose their post. The altar chose them. They showed up anyway. Now they keep the doors open.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4: THE CONGREGATION -->
+<section class="chapter reverse fade-in">
+  <div class="chapter-image">
+    <img src="./images/05_the_congregation.png" alt="The Congregation" loading="lazy">
+  </div>
+  <div class="chapter-text">
+    <div class="chapter-number">Chapter IV</div>
+    <h2 class="chapter-title">The Congregation</h2>
+    <div class="chapter-body">
+      <p>They come from every biome. They come from outside the Otherside entirely. Chain doesn't matter. Wallet size doesn't matter. The pews make everyone equal.</p>
+      <p>On Saturday, the Church fills. The Deacon takes his position. The altar lights.</p>
+    </div>
+    <blockquote class="chapter-quote">
+      "See you at Church."
+    </blockquote>
+    <div class="chapter-body">
+      <p>Win or lose, you come back next week and throw again. That is the faith. Not believing you'll win. Believing it is always worth the throw.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SACRED LAW -->
+<section id="the-law" class="sacred-law fade-in">
+  <div class="divider" style="margin-bottom: 48px;"><span>✦</span></div>
+  <h2>The Sacred Laws</h2>
+  <ul class="law-list">
+    <li>
+      <div class="law-text">
+        <strong>The Church is the oldest thing here.</strong>
+        Before the Apes mapped the land, before anyone drew a border — the Church was standing. You are a guest in something ancient. Act accordingly.
+      </div>
+    </li>
+    <li>
+      <div class="law-text">
+        <strong>The altar rewards commitment. Not caution.</strong>
+        Half a throw is no throw. The runestones know the difference between faith and hedging. They have always known.
+      </div>
+    </li>
+    <li>
+      <div class="law-text">
+        <strong>Playing is praying. Losing is tithing.</strong>
+        The Church does not promise luck. It promises that showing up with nothing held back will be seen. The universe keeps its own records.
+      </div>
+    </li>
+    <li>
+      <div class="law-text">
+        <strong>Chain doesn't matter. Wallet doesn't matter.</strong>
+        The pews make everyone equal. The only thing the Church measures is whether you came back after you lost.
+      </div>
+    </li>
+    <li>
+      <div class="law-text">
+        <strong>Win or lose — you come back.</strong>
+        That is the faith. Not believing you'll win. Believing it is always worth the throw.
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- FULL BLEED: THE FAITH -->
+<section class="fullbleed fade-in">
+  <div class="fullbleed-bg">
+    <img src="./images/06_the_faith.png" alt="The Faith" loading="lazy">
+  </div>
+  <div class="fullbleed-overlay"></div>
+  <div class="fullbleed-content">
+    <blockquote>
+      "Nobody knows who built the altar.<br>They just know:<br>the Church provides."
+    </blockquote>
+    <cite>— The Book of Gimbo</cite>
+  </div>
+</section>
+
+<!-- MINT -->
+<section id="mint" class="mint fade-in">
+  <div class="mint-bg"></div>
+  <div class="mint-overlay"></div>
+  <div class="mint-top"></div>
+  <div class="mint-bottom"></div>
+  <div class="mint-content">
+    <div class="mint-eyebrow">The Offering</div>
+    <h2>Make Your<br>Offering</h2>
+    <div class="mint-date">March 20, 2026</div>
+    <p>The Church has been here since before anyone was watching. Now it opens its doors to all who seek the altar. Your chain doesn't matter. Your wallet size doesn't matter. The runestones are ready.</p>
+    <div class="mint-buttons">
+      <a href="https://twitter.com/ape_church" target="_blank" class="btn-primary">Follow Ape Church</a>
+      <a href="https://twitter.com/OtherGamesXYZ" target="_blank" class="btn-secondary">Other Games</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="mark">The Church of the Gimbo</div>
+  <p>The altar has always been waiting for you.</p>
+  <div class="mark">Otherside · 2026</div>
+</footer>
+
+<script>
+// ── Particle system (floating dust like cathedral light) ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  particles = Array.from({length: 60}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - 0.5) * 0.15,
+    vy: -Math.random() * 0.3 - 0.05,
+    alpha: Math.random() * 0.6 + 0.1,
+  }));
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+    if (p.x < -10) p.x = W + 10;
+    if (p.x > W + 10) p.x = -10;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(201, 168, 76, ${p.alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('resize', () => { resize(); createParticles(); });
+resize(); createParticles(); animateParticles();
+
+// ── Scroll fade-in ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Parallax hero ──
+window.addEventListener('scroll', () => {
+  const hero = document.querySelector('.hero-bg');
+  if (hero) {
+    hero.style.transform = `scale(1.05) translateY(${window.scrollY * 0.2}px)`;
+  }
+});
+</script>
+</body>
+</html>
