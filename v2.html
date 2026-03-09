@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Church of the Gimbo</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Cormorant+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -23,6 +23,10 @@
     scroll-behavior: smooth;
   }
 
+  .gothic {
+    font-family: 'UnifrakturMaguntia', cursive;
+  }
+
   /* NAV */
   nav {
     position: fixed;
@@ -36,11 +40,9 @@
     background: linear-gradient(to bottom, rgba(5,5,4,0.7) 0%, transparent 100%);
   }
   nav .mark {
-    font-family: 'Cormorant SC', serif;
-    font-size: 11px;
-    letter-spacing: 0.35em;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 22px;
     color: var(--gold);
-    text-transform: uppercase;
   }
   nav ul {
     list-style: none;
@@ -48,9 +50,8 @@
     gap: 40px;
   }
   nav ul li a {
-    font-family: 'Cormorant SC', serif;
     font-size: 11px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     color: rgba(255,255,255,0.6);
     text-decoration: none;
     text-transform: uppercase;
@@ -88,7 +89,6 @@
     padding: 0 24px;
   }
   .hero-eyebrow {
-    font-family: 'Cormorant SC', serif;
     font-size: 11px;
     letter-spacing: 0.4em;
     color: var(--gold);
@@ -96,38 +96,33 @@
     margin-bottom: 28px;
   }
   .hero-title {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(56px, 10vw, 130px);
-    font-weight: 300;
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    margin-bottom: 32px;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(52px, 9vw, 120px);
+    line-height: 1.05;
+    margin-bottom: 28px;
     color: #fff;
   }
   .hero-tagline {
-    font-size: clamp(16px, 2vw, 22px);
+    font-size: clamp(15px, 1.8vw, 20px);
     font-weight: 300;
     font-style: italic;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255,255,255,0.55);
     letter-spacing: 0.05em;
     margin-bottom: 48px;
   }
   .btn {
     display: inline-block;
-    font-family: 'Cormorant SC', serif;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid rgba(201,168,76,0.4);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
+    color: var(--black);
+    background: var(--gold);
     padding: 14px 36px;
+    border-radius: 999px;
     text-decoration: none;
     transition: all 0.3s;
   }
-  .btn:hover {
-    background: rgba(201,168,76,0.08);
-    border-color: var(--gold);
-  }
+  .btn:hover { background: #e8c96a; }
 
   /* SCROLL INDICATOR */
   .scroll-hint {
@@ -199,7 +194,6 @@
     padding-right: 24px;
   }
   .chapter-label {
-    font-family: 'Cormorant SC', serif;
     font-size: 10px;
     letter-spacing: 0.4em;
     color: var(--gold);
@@ -208,10 +202,9 @@
     display: block;
   }
   .bleed-title {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(36px, 6vw, 80px);
-    font-weight: 300;
-    line-height: 1;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(36px, 5.5vw, 72px);
+    line-height: 1.1;
     color: #fff;
     margin-bottom: 24px;
   }
@@ -316,9 +309,8 @@
     display: block;
   }
   .split-title {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(32px, 4vw, 56px);
-    font-weight: 300;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(32px, 4vw, 52px);
     color: #fff;
     margin-bottom: 16px;
   }
@@ -348,7 +340,6 @@
     margin: 0 auto 48px;
   }
   .mint-eyebrow {
-    font-family: 'Cormorant SC', serif;
     font-size: 10px;
     letter-spacing: 0.5em;
     color: var(--gold);
@@ -356,10 +347,9 @@
     margin-bottom: 24px;
   }
   .mint-title {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(48px, 8vw, 110px);
-    font-weight: 300;
-    line-height: 1;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(52px, 9vw, 120px);
+    line-height: 1.05;
     color: #fff;
     margin-bottom: 24px;
   }
@@ -372,13 +362,13 @@
   }
   .btn-mint {
     display: inline-block;
-    font-family: 'Cormorant SC', serif;
-    font-size: 12px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: lowercase;
     color: var(--black);
     background: var(--gold);
-    padding: 18px 56px;
+    padding: 16px 56px;
+    border-radius: 999px;
     text-decoration: none;
     transition: all 0.3s;
     margin-bottom: 20px;
@@ -403,8 +393,48 @@
     opacity: 0.5;
     margin-bottom: 20px;
   }
+  /* PHOTO GRID */
+  .photo-grid-section {
+    padding: 80px 48px;
+    background: var(--black);
+  }
+  .photo-grid-header {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .photo-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    filter: grayscale(30%) brightness(0.75);
+    transition: filter 0.4s, transform 0.4s;
+  }
+  .photo-grid img:hover {
+    filter: grayscale(0%) brightness(0.9);
+    transform: scale(1.02);
+  }
+
+  /* GRAIN overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px;
+  }
+
   footer .mark {
-    font-family: 'Cormorant SC', serif;
     font-size: 10px;
     letter-spacing: 0.35em;
     color: rgba(255,255,255,0.25);
@@ -541,6 +571,19 @@
 <div class="interlude fade">
   <div class="interlude-rule"></div>
   <p class="interlude-text">Every Gimbo is one throw from either side.<br>That's not a warning. That's the point.</p>
+</div>
+
+<!-- PHOTO GRID -->
+<div class="photo-grid-section fade">
+  <div class="photo-grid-header">the congregation</div>
+  <div class="photo-grid">
+    <img src="./images/01_before_the_maps.png" alt="The Threshold">
+    <img src="./images/03_the_deacon.png" alt="The Deacon">
+    <img src="./images/04_the_altar.png" alt="The Altar">
+    <img src="./images/05_the_congregation.png" alt="The Knowing">
+    <img src="./images/hero_cathedral.png" alt="The Church">
+    <img src="./images/06_the_faith.png" alt="The Fallen">
+  </div>
 </div>
 
 <!-- MINT -->
