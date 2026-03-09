@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Church of the Gimbo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Cormorant+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a84c;
+    --black: #050504;
+    --text: #d4cfc4;
+    --dim: rgba(255,255,255,0.5);
+  }
+
+  html, body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: normal;
+    background: linear-gradient(to bottom, rgba(5,5,4,0.7) 0%, transparent 100%);
+  }
+  nav .mark {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+  nav ul li a {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  nav ul li a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.55);
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(5,5,4,0.2) 0%, transparent 40%, transparent 60%, rgba(5,5,4,0.9) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .hero-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(56px, 10vw, 130px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+    color: #fff;
+  }
+  .hero-tagline {
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.05em;
+    margin-bottom: 48px;
+  }
+  .btn {
+    display: inline-block;
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 14px 36px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold);
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(201,168,76,0.5), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  /* FULL BLEED SECTIONS */
+  .bleed {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .bleed.center { align-items: center; justify-content: center; }
+  .bleed-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: brightness(0.5);
+    transition: transform 0.1s;
+  }
+  .bleed-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5,5,4,1) 0%, rgba(5,5,4,0.3) 40%, transparent 100%);
+  }
+  .bleed-gradient.sides {
+    background: radial-gradient(ellipse at center, transparent 20%, rgba(5,5,4,0.7) 100%);
+  }
+  .bleed-text {
+    position: relative;
+    z-index: 2;
+    padding: 0 8vw 80px;
+    max-width: 700px;
+  }
+  .bleed-text.centered {
+    text-align: center;
+    max-width: 800px;
+    padding-bottom: 0;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .chapter-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .bleed-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .bleed-body {
+    font-size: clamp(15px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+  }
+  .bleed-body.centered { max-width: 600px; margin: 0 auto; text-align: center; }
+  .bleed-quote {
+    font-size: clamp(20px, 3vw, 36px);
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+    margin-top: 32px;
+    border-left: 2px solid var(--gold);
+    padding-left: 28px;
+  }
+  .bleed-quote.centered {
+    border-left: none;
+    padding-left: 0;
+    text-align: center;
+    font-size: clamp(22px, 3.5vw, 44px);
+  }
+
+  /* TEXT-ONLY INTERLUDE */
+  .interlude {
+    padding: 120px 8vw;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .interlude-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 48px;
+    opacity: 0.4;
+  }
+  .interlude-text {
+    font-size: clamp(22px, 3vw, 40px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* SPLIT — BLESSED / FALLEN */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+  }
+  .split-panel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 60px 48px;
+  }
+  .split-panel img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45);
+    transition: transform 0.6s ease;
+  }
+  .split-panel:hover img { transform: scale(1.03); }
+  .split-gradient-gold {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(201,168,76,0.15) 0%, transparent 50%);
+  }
+  .split-gradient-red {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(120,30,30,0.25) 0%, transparent 50%);
+  }
+  .split-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+    z-index: 10;
+  }
+  .split-text {
+    position: relative;
+    z-index: 2;
+  }
+  .split-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .split-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .split-body {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    max-width: 320px;
+  }
+
+  /* MINT SECTION */
+  .mint {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--black);
+    padding: 48px;
+  }
+  .mint-rule {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    margin: 0 auto 48px;
+  }
+  .mint-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .mint-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(48px, 8vw, 110px);
+    font-weight: 300;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .mint-sub {
+    font-size: clamp(16px, 1.8vw, 22px);
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 56px;
+    line-height: 1.6;
+  }
+  .btn-mint {
+    display: inline-block;
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 18px 56px;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+  }
+  .btn-mint:hover { background: #e8c96a; }
+  .mint-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.1em;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px 48px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  footer img {
+    width: 44px;
+    height: 44px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+  footer .mark {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  footer p {
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* PARALLAX JS hook */
+  .parallax { will-change: transform; }
+
+  /* FADE IN */
+  .fade { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .fade.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    nav { padding: 20px 24px; }
+    .bleed-text { padding: 0 24px 60px; }
+    .split { grid-template-columns: 1fr; height: auto; }
+    .split-panel { min-height: 60vh; }
+    .split-divider { display: none; }
+    .interlude { padding: 80px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="mark">Church of the Gimbo</div>
+  <ul>
+    <li><a href="#the-deacon">The Deacon</a></li>
+    <li><a href="#the-altar">The Altar</a></li>
+    <li><a href="#blessed-fallen">Blessed & Fallen</a></li>
+    <li><a href="#mint">The Offering</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img class="hero-img parallax" src="./images/hero_cathedral.png" alt="The Church">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Est. Before Memory</div>
+    <h1 class="hero-title">The Church<br>of the Gimbo</h1>
+    <p class="hero-tagline">Playing is praying. Losing is tithing.</p>
+    <a href="#the-deacon" class="btn">Enter the Church</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- INTERLUDE 1 -->
+<div class="interlude fade">
+  <div class="interlude-rule"></div>
+  <p class="interlude-text">Before the Apes mapped the land. Before the Kodas named the biomes. Before anyone drew a border or claimed a shore — there were the ponds. And the Gimbos were already there.</p>
+</div>
+
+<!-- THE THRESHOLD -->
+<section class="bleed fade">
+  <img class="bleed-img" src="./images/01_before_the_maps.png" alt="The Threshold">
+  <div class="bleed-gradient"></div>
+  <div class="bleed-text">
+    <span class="chapter-label">Chapter I</span>
+    <h2 class="bleed-title">The Church Does Not<br>Appear on Any Map</h2>
+    <p class="bleed-body">It was there before the records began. In the swampy margins between what was claimed and what was forgotten — the Church stands. Stone. Cold. Certain.</p>
+    <blockquote class="bleed-quote">"The Kodas know about it.<br>They don't talk about it."</blockquote>
+  </div>
+</section>
+
+<!-- THE DEACON -->
+<section id="the-deacon" class="bleed fade" style="align-items: center;">
+  <img class="bleed-img" src="./images/03_the_deacon.png" alt="The Deacon" style="object-position: center center; filter: brightness(0.4);">
+  <div class="bleed-gradient sides"></div>
+  <div class="bleed-text centered fade">
+    <span class="chapter-label">Chapter II — The Deacon</span>
+    <h2 class="bleed-title">The Most Unhinged Gimbo<br>in the Church</h2>
+    <p class="bleed-body centered">Is also the calmest person in the room. He's done things at this altar that people still talk about in the back. He was back the next week. He's always back.</p>
+    <blockquote class="bleed-quote centered">"He nods once when something true happens.<br>That nod means everything."</blockquote>
+  </div>
+</section>
+
+<!-- THE ALTAR -->
+<section id="the-altar" class="bleed fade">
+  <img class="bleed-img" src="./images/04_the_altar.png" alt="The Altar" style="filter: brightness(0.45); object-position: center bottom;">
+  <div class="bleed-gradient"></div>
+  <div class="bleed-text">
+    <span class="chapter-label">Chapter III — The Altar</span>
+    <h2 class="bleed-title">Nobody Built It.</h2>
+    <p class="bleed-body">The altar has been here longer than the Church. It doesn't speak. It doesn't move. It receives offerings and it decides. There is no formula. No trick. What the altar rewards is commitment. Not caution.</p>
+    <blockquote class="bleed-quote">Playing is praying.<br>Losing is tithing.</blockquote>
+  </div>
+</section>
+
+<!-- INTERLUDE 2 -->
+<div class="interlude fade">
+  <div class="interlude-rule"></div>
+  <p class="interlude-text">"You don't come to the altar because you expect to win. You come because showing up is the act of faith."</p>
+</div>
+
+<!-- BLESSED / FALLEN SPLIT -->
+<section id="blessed-fallen" class="split">
+  <div class="split-panel fade">
+    <img src="./images/05_the_congregation.png" alt="The Blessed">
+    <div class="split-gradient-gold"></div>
+    <div class="split-text">
+      <span class="split-label" style="color: #c9a84c;">The Blessed</span>
+      <h3 class="split-title">The Knowing</h3>
+      <p class="split-body">The altar answered. You're not celebrating — you understand something now that can't be explained. You'll be back next week. Not out of greed. Out of knowing.</p>
+    </div>
+  </div>
+  <div class="split-divider"></div>
+  <div class="split-panel fade">
+    <img src="./images/06_the_faith.png" alt="The Fallen">
+    <div class="split-gradient-red"></div>
+    <div class="split-text">
+      <span class="split-label" style="color: #c87070;">The Fallen</span>
+      <h3 class="split-title">The Devoted</h3>
+      <p class="split-body">The altar was silent. You're still kneeling in the dark after everyone else left. You'll be back next week. Not believing you'll win. Believing it's always worth the throw.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERLUDE 3 -->
+<div class="interlude fade">
+  <div class="interlude-rule"></div>
+  <p class="interlude-text">Every Gimbo is one throw from either side.<br>That's not a warning. That's the point.</p>
+</div>
+
+<!-- MINT -->
+<section id="mint" class="mint">
+  <div class="mint-rule"></div>
+  <div class="mint-eyebrow fade">The Offering</div>
+  <h2 class="mint-title fade">Make Your<br>Offering</h2>
+  <p class="mint-sub fade">The Church has been here since before anyone was watching.<br>Now it opens its doors.</p>
+  <a href="https://twitter.com/apechurch" target="_blank" class="btn-mint fade">Follow @apechurch</a>
+  <p class="mint-note fade">Coming Soon · Church · 2026</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="./images/ape-church-logo.png" alt="Ape Church">
+  <span class="mark">The Church of the Gimbo</span>
+  <p>The altar has always been waiting for you.</p>
+</footer>
+
+<script>
+// Fade in on scroll
+const fades = document.querySelectorAll('.fade');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+fades.forEach(el => observer.observe(el));
+
+// Subtle parallax on hero image
+const heroImg = document.querySelector('.hero-img');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroImg && y < window.innerHeight) {
+    heroImg.style.transform = `translateY(${y * 0.3}px)`;
+  }
+}, { passive: true });
+</script>
+</body>
+</html>
